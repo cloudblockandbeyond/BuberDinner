@@ -1,0 +1,21 @@
+@host=http://localhost:5136
+
+POST {{host}}/api/Authentication/Register
+Content-Type: application/json
+
+{
+    "FirstName": "Pavan",
+    "LastName": "Singh",
+    "Email": "cloudblockandbeyond@gmail.com",
+    "Password": "cloudblock&beyond@37"
+}
+
+###
+
+POST {{host}}/api/Authentication/Login
+Content-Type: application/json
+
+{
+    "Email": "cloudblockandbeyond@gmail.com",
+    "Password": "cloudblock&beyond@37"
+}
