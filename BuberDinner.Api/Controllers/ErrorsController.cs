@@ -11,9 +11,7 @@ namespace BuberDinner.Api.Controllers
         {
             Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
 
-            return Problem(
-                detail: exception?.Message
-            );
+            return Problem();
         }
     }
 }

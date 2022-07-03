@@ -1,12 +1,12 @@
 using BuberDinner.Application.Services.Authentication;
 using BuberDinner.Contracts.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using ErrorOr;
 
 namespace BuberDinner.Api.Controllers
 {
-    [ApiController]
     [Route("api/[controller]/[action]")]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : ApiController
     {
         private readonly IAuthenticationService _authenticationService;
 
@@ -18,33 +18,35 @@ namespace BuberDinner.Api.Controllers
         [HttpPost]
         public IActionResult Register([FromBody] RegisterRequest request)
         {
-            var result = _authenticationService.Register(request.FirstName, request.LastName, request.Email, request.Password);
+            ErrorOr<AuthenticationResult> authResult = _authenticationService.Register(request.FirstName
+            , request.LastName, request.Email, request.Password);
 
-            var response = new AuthenticationResponse (
-                result.user.Id,
-                result.user.FirstName,
-                result.user.LastName,
-                result.user.Email,
-                result.Token
-            );
-
-            return Ok(response);
+            return authResult.Match(
+                authResult => Ok(MapAuthResult(authResult)),
+                error => Problem(error));
         }
 
         [HttpPost]
         public IActionResult Login([FromBody] LoginRequest request)
         {
-            var result = _authenticationService.Login(request.Email, request.Password);
+            ErrorOr<AuthenticationResult> authResult = _authenticationService.Login(request.Email, request.Password);
 
+            return authResult.Match(
+                authResult => Ok(MapAuthResult(authResult)),
+                error => Problem(error));
+        }
+
+        public static AuthenticationResponse MapAuthResult(AuthenticationResult authResult)
+        {
             var response = new AuthenticationResponse (
-                result.user.Id,
-                result.user.FirstName,
-                result.user.LastName,
-                result.user.Email,
-                result.Token
+                authResult.user.Id,
+                authResult.user.FirstName,
+                authResult.user.LastName,
+                authResult.user.Email,
+                authResult.Token
             );
 
-            return Ok(response);
+            return response;
         }
     }
 }
