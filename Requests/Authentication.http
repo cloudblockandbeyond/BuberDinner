@@ -4,10 +4,10 @@ POST {{host}}/api/Authentication/Register
 Content-Type: application/json
 
 {
-    "FirstName": "Pavan",
-    "LastName": "Singh",
-    "Email": "cloudblockandbeyond@gmail.com",
-    "Password": "cloudblock&beyond@37"
+    "FirstName": "userId",
+    "LastName": "userFirstName",
+    "Email": "userLastName@gmail.com",
+    "Password": "userLastName"
 }
 
 ###
@@ -19,3 +19,7 @@ Content-Type: application/json
     "Email": "cloudblockandbeyond@gmail.com",
     "Password": "cloudblock&beyond@37"
 }
+
+###
+
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMzZmOTc3OC0xMmYzLTQ2OWQtOTc4Mi0yZmI2YmEzY2ZhZTgiLCJnaXZlbl9uYW1lIjoidXNlcklkIiwiZmFtaWx5X25hbWUiOiJ1c2VyRmlyc3ROYW1lIiwianRpIjoiZTViZTdlOWMtODM0ZC00ZWE4LTg0ZWYtMzA2Y2U3OGU4NTkwIiwidHdvRmFjdG9yRW5hYmxlZCI6InRydWUiLCJuYmYiOjE2NTcxNzc4NDMsImV4cCI6MTY1NzE4MTQ0MywiaXNzIjoiaHR0cDovL3d3d3cuZGVsbC5jb20vaWRlbnRpdHkiLCJhdWQiOiJ3d3cuZGVsbC5jb20ifQ.Am3wogodeQAGtJFEEMoP1JwPcOxbdQCbcc25N2Kz1_kFakxcP2e7zC38rOTZmylR5kiWD0P91NsFrbSpYxCTzB0DZul8WyApKCa1sR6lOUZeqzTgpi9lcUCRFjOtin4nWjqpPaDQ2jyEOg-aenYmLdIYu_paRqrlaC0NxawOqUqVNUqW7YGf9cNbeZ1dTiumsi5MjD4wrslUkGIDVxAIhR6J12Gx0xCXlpJsEIGJEPaJ8P0JA1m038bCTzWYiluja5Z-T_4h4LTIbhs8gjlIfPRdDLhQQPhPfsIBmKACh4PsPr7jVLEieHotnjdQf4PKX6XN55qUtP9TlEDgN8C85g
