@@ -23,6 +23,7 @@ namespace BuberDinner.Infrastructure.Authentication
 
         public string GenerateToken(User user)
         {
+            var JwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             RSA rsa = RSA.Create();
             // get the private key from RSA parameters
             var rsaParameters = rsa.ExportParameters(true);
@@ -43,12 +44,12 @@ namespace BuberDinner.Infrastructure.Authentication
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes),
                 notBefore: _dateTimeProvider.UtcNow,
+                expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes),
                 signingCredentials: signingCredentials
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(securityToken);
+            return JwtSecurityTokenHandler.WriteToken(securityToken);
         }
     }
 }

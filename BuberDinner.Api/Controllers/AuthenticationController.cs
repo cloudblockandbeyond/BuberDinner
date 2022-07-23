@@ -1,25 +1,28 @@
-using BuberDinner.Application.Services.Authentication;
 using BuberDinner.Contracts.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using ErrorOr;
+using MediatR;
+using BuberDinner.Application.Authentication.Commands.Register;
+using BuberDinner.Application.Authentication.Queries.Login;
+using BuberDinner.Application.Authentication.Common;
 
 namespace BuberDinner.Api.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class AuthenticationController : ApiController
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IMediator _mediator;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IMediator mediator)
         {
-            _authenticationService = authenticationService;
+            _mediator = mediator;
         }
 
         [HttpPost]
-        public IActionResult Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            ErrorOr<AuthenticationResult> authResult = _authenticationService.Register(request.FirstName
-            , request.LastName, request.Email, request.Password);
+            var command = new RegisterCommand(request.FirstName, request.LastName, request.Email, request.Password);
+            ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
 
             return authResult.Match(
                 authResult => Ok(MapAuthResult(authResult)),
@@ -27,9 +30,10 @@ namespace BuberDinner.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            ErrorOr<AuthenticationResult> authResult = _authenticationService.Login(request.Email, request.Password);
+            var query = new LoginQuery(request.Email, request.Password);
+            ErrorOr<AuthenticationResult> authResult = await _mediator.Send(query);
 
             return authResult.Match(
                 authResult => Ok(MapAuthResult(authResult)),
