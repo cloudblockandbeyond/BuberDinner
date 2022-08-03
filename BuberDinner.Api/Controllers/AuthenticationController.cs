@@ -5,6 +5,7 @@ using MediatR;
 using BuberDinner.Application.Authentication.Commands.Register;
 using BuberDinner.Application.Authentication.Queries.Login;
 using BuberDinner.Application.Authentication.Common;
+using MapsterMapper;
 
 namespace BuberDinner.Api.Controllers
 {
@@ -12,45 +13,36 @@ namespace BuberDinner.Api.Controllers
     public class AuthenticationController : ApiController
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public AuthenticationController(IMediator mediator)
+        public AuthenticationController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            var command = new RegisterCommand(request.FirstName, request.LastName, request.Email, request.Password);
+            var command = _mapper.Map<RegisterCommand>(request);
             ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
 
             return authResult.Match(
-                authResult => Ok(MapAuthResult(authResult)),
-                error => Problem(error));
+                authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+                error => Problem(error)
+            );
         }
 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var query = new LoginQuery(request.Email, request.Password);
+            var query = _mapper.Map<LoginQuery>(request);
             ErrorOr<AuthenticationResult> authResult = await _mediator.Send(query);
 
             return authResult.Match(
-                authResult => Ok(MapAuthResult(authResult)),
-                error => Problem(error));
-        }
-
-        public static AuthenticationResponse MapAuthResult(AuthenticationResult authResult)
-        {
-            var response = new AuthenticationResponse (
-                authResult.user.Id,
-                authResult.user.FirstName,
-                authResult.user.LastName,
-                authResult.user.Email,
-                authResult.Token
+                authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+                error => Problem(error)
             );
-
-            return response;
         }
     }
 }
